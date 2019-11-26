@@ -3,7 +3,9 @@ import {
   View,
   TouchableOpacity,
   PixelRatio,
-  FlatList
+  FlatList,
+  Dimensions,
+  Platform
 } from 'react-native'
 
 import React from 'react'
@@ -12,6 +14,12 @@ import Loading from './components/Loading'
 import ResultBoard from './components/ResultBoard'
 import ScrollableTabView from 'react-native-scrollable-tab-view'
 import Log from './Log'
+import JSONTree from "react-native-json-tree";
+
+const isIPhoneX = () => {
+  const { height, width } = Dimensions.get('window')
+  return Platform.OS === 'ios' && (Dimensions.get('window').height === 812 || Dimensions.get('window').height === 896)
+}
 
 export default class Console extends Plugin {
   static name = 'Console'
@@ -24,8 +32,8 @@ export default class Console extends Plugin {
     ERROR: 3
   }
   static theme = {
-    borderColorGray: '#BBC',
-    borderColor: '#DDD'
+    borderColorGray: '#bbbbcc',
+    borderColor: '#dddddd'
   }
 
   state = {
@@ -72,10 +80,9 @@ export default class Console extends Plugin {
           logType: method,
           callstackArr
         }
-
-        if (ignoreFilter && typeof ignoreFilter === 'function' && ignoreFilter(...args)) {
-          consoleLog[method](...args)
-        } else {
+        if (ignoreFilter && typeof ignoreFilter === 'function') {
+          args[0] = undefined
+          args[1] = ''
           consoleLog[method](...args)
           Console.addLog(formattedLog)
         }
@@ -171,7 +178,8 @@ export default class Console extends Plugin {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#FFFFFF'
+          backgroundColor: '#FFFFFF',
+          marginBottom: isIPhoneX() ? 34 : 0
         }}>
         <ScrollableTabView
           initialPage={0}
