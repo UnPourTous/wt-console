@@ -81,8 +81,6 @@ export default class Console extends Plugin {
           callstackArr
         }
         if (ignoreFilter && typeof ignoreFilter === 'function') {
-          args[0] = undefined
-          args[1] = ''
           consoleLog[method](...args)
           Console.addLog(formattedLog)
         }
