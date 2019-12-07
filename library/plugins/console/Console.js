@@ -170,7 +170,7 @@ export default class Console extends Plugin {
   }
   render () {
     const {logServerUrl = ''} = Console.options || {}
-    const methodList = ['All', 'Warn', 'Error', 'Network']
+    const methodList = ['All', 'Warn', 'Error']
     const logList = this.state.logList.sort((a, b) => b.ts - a.ts)
     return (
       <View
